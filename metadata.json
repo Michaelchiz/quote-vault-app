@@ -1,0 +1,5 @@
+{
+  "name": "QuoteVault",
+  "description": "A personal vault for organizing and retrieving quotes from TikTok image carousels.",
+  "requestFramePermissions": []
+}

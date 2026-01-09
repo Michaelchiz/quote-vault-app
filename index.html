@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuoteVault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#f1fcf9',
+                100: '#d0f0e8',
+                200: '#a3e0d1',
+                300: '#6fc7b3',
+                400: '#45a892',
+                500: '#2d8a76',
+                600: '#06392f',
+                700: '#052e26',
+                800: '#04251f',
+                900: '#021814',
+              },
+              // Dynamic Theme Colors
+              skin: {
+                base: 'var(--color-bg-base)',
+                card: 'var(--color-bg-card)',
+                header: 'var(--color-bg-header)',
+                text: 'var(--color-text-base)',
+                muted: 'var(--color-text-muted)',
+                border: 'var(--color-border)',
+                hover: 'var(--color-bg-hover)',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root {
+        /* Default (Light) */
+        --color-bg-base: #f8fafc; /* slate-50 */
+        --color-bg-card: #ffffff; /* white */
+        --color-bg-header: rgba(255, 255, 255, 0.8);
+        --color-text-base: #0f172a; /* slate-900 */
+        --color-text-muted: #64748b; /* slate-500 */
+        --color-border: #e2e8f0; /* slate-200 */
+        --color-bg-hover: #f1f5f9; /* slate-100 */
+      }
+
+      [data-theme='dark'] {
+        --color-bg-base: #020617; /* slate-950 */
+        --color-bg-card: #0f172a; /* slate-900 */
+        --color-bg-header: rgba(15, 23, 42, 0.8);
+        --color-text-base: #f1f5f9; /* slate-100 */
+        --color-text-muted: #94a3b8; /* slate-400 */
+        --color-border: #1e293b; /* slate-800 */
+        --color-bg-hover: #1e293b; /* slate-800 */
+      }
+
+      [data-theme='green'] {
+        --color-bg-base: #ecfdf5; /* emerald-50 */
+        --color-bg-card: #ffffff; /* white */
+        --color-bg-header: rgba(255, 255, 255, 0.8);
+        --color-text-base: #064e3b; /* emerald-900 */
+        --color-text-muted: #059669; /* emerald-600 */
+        --color-border: #a7f3d0; /* emerald-200 */
+        --color-bg-hover: #d1fae5; /* emerald-100 */
+      }
+
+      [data-theme='blue'] {
+        --color-bg-base: #eff6ff; /* blue-50 */
+        --color-bg-card: #ffffff; /* white */
+        --color-bg-header: rgba(255, 255, 255, 0.8);
+        --color-text-base: #1e3a8a; /* blue-900 */
+        --color-text-muted: #3b82f6; /* blue-500 */
+        --color-border: #bfdbfe; /* blue-200 */
+        --color-bg-hover: #dbeafe; /* blue-100 */
+      }
+
+      body {
+        -webkit-tap-highlight-color: transparent;
+        background-color: var(--color-bg-base);
+        color: var(--color-text-base);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      
+      /* Hide scrollbar for clean horizontal scrolling */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.4s ease-out forwards;
+      }
+      
+      @keyframes slideInLeft {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+      }
+      .animate-slide-in-left {
+        animation: slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      
+      @keyframes bounceShort {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+      .animate-bounce-short {
+        animation: bounceShort 2s infinite ease-in-out;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.35.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "uuid": "https://esm.sh/uuid@^13.0.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
