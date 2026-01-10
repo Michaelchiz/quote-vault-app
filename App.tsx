@@ -9,6 +9,7 @@ import { AddContent } from './pages/AddContent';
 import { Search } from './pages/Search';
 import { About } from './pages/About';
 import { Onboarding } from './pages/Onboarding';
+import { Dashboard } from './pages/MyAccount';
 import { ContactPage, FeedbackPage, RatePage, LanguagePage, TermsPage, PrivacyPage } from './pages/SettingsPages';
 
 // Protected Route for Onboarding
@@ -35,6 +36,7 @@ const App: React.FC = () => {
             {/* Protected Routes */}
             <Route path="/" element={<RequireOnboarding><Home /></RequireOnboarding>} />
             <Route path="/about" element={<RequireOnboarding><About /></RequireOnboarding>} />
+            <Route path="/dashboard" element={<RequireOnboarding><Dashboard /></RequireOnboarding>} />
             <Route path="/category/:id" element={<RequireOnboarding><CategoryDetails /></RequireOnboarding>} />
             <Route path="/subcategory/:id" element={<RequireOnboarding><SubCategoryDetails /></RequireOnboarding>} />
             <Route path="/add" element={<RequireOnboarding><AddContent /></RequireOnboarding>} />

@@ -13,7 +13,7 @@ const CATEGORIES: CategoryName[] = ['Flirty', 'Motivation', 'Relationships', 'Co
 
 export const AddContent: React.FC = () => {
   const navigate = useNavigate();
-  const { addSubCategory } = useStore();
+  const { addSubCategory, addLinkToHistory } = useStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [viewState, setViewState] = useState<ViewState>('input');
@@ -65,6 +65,10 @@ export const AddContent: React.FC = () => {
     if (!linkInput) return;
 
     setSourceLink(linkInput);
+    
+    // Add to history immediately
+    addLinkToHistory(linkInput);
+
     setViewState('processing');
     setErrorMsg(null);
 

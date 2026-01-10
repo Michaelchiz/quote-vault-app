@@ -1,3 +1,4 @@
+
 export type CategoryName = 'Flirty' | 'Motivation' | 'Relationships' | 'Confidence' | 'Mindset' | 'Other';
 
 export interface Quote {
@@ -19,4 +20,17 @@ export interface ProcessedResult {
   category: CategoryName;
   subCategoryTitle: string;
   quotes: string[];
+}
+
+export interface LinkHistoryItem {
+  id: string;
+  url: string;
+  platform: 'tiktok' | 'instagram' | 'other';
+  createdAt: number;
+}
+
+export interface UserAccount {
+  credits: number;
+  lastDailyClaim: number | null; // Timestamp of last claim
+  streak: number;
 }

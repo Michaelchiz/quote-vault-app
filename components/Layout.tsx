@@ -25,7 +25,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
   };
 
   const menuItems = [
-    { icon: <User size={20} />, label: 'My Account', path: '/' }, // Redirects home for MVP
+    { icon: <User size={20} />, label: 'Dashboard', path: '/dashboard' }, 
     { icon: <Info size={20} />, label: 'About QuoteVault', path: '/about' },
     { icon: <Star size={20} />, label: 'Rate Us', path: '/settings/rate' },
     { icon: <Globe size={20} />, label: 'Language', path: '/settings/language' },
