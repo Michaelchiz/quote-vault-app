@@ -3,17 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { geminiService } from '../services/geminiService';
 import { useStore } from '../store/StoreContext';
-import { ProcessedResult, SubCategory, CategoryName } from '../types';
+import { ProcessedResult, SubCategory } from '../types';
 import { Image as ImageIcon, Link as LinkIcon, Loader2, Check, AlertCircle, Trash2, ArrowRight, RefreshCw, Wand2, PenTool } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
 type ViewState = 'input' | 'processing' | 'review' | 'success' | 'failure';
 
-const CATEGORIES: CategoryName[] = ['Flirty', 'Motivation', 'Relationships', 'Confidence', 'Mindset', 'Other'];
-
 export const AddContent: React.FC = () => {
   const navigate = useNavigate();
-  const { addSubCategory, addLinkToHistory } = useStore();
+  const { addSubCategory, addLinkToHistory, categories } = useStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [viewState, setViewState] = useState<ViewState>('input');
@@ -22,7 +20,7 @@ export const AddContent: React.FC = () => {
   const [linkInput, setLinkInput] = useState('');
   
   // Manual Entry State
-  const [manualCategory, setManualCategory] = useState<CategoryName>('Motivation');
+  const [manualCategory, setManualCategory] = useState<string>('Motivation');
   const [manualTitle, setManualTitle] = useState('');
   const [manualQuote, setManualQuote] = useState('');
   
@@ -38,7 +36,7 @@ export const AddContent: React.FC = () => {
     setLinkInput('');
     setManualTitle('');
     setManualQuote('');
-    setManualCategory('Motivation');
+    setManualCategory(categories[0]?.id || 'Other');
     setErrorMsg(null);
     setSavedId(null);
   };
@@ -50,7 +48,8 @@ export const AddContent: React.FC = () => {
       setErrorMsg(null);
       
       try {
-        const data = await geminiService.processImages(files);
+        const availableCategoryIds = categories.map(c => c.id);
+        const data = await geminiService.processImages(files, availableCategoryIds);
         setResult(data);
         setViewState('review');
       } catch (err) {
@@ -74,8 +73,11 @@ export const AddContent: React.FC = () => {
 
     // Simulate Processing for Demo
     setTimeout(() => {
+        // Find Motivation if exists, else use first avail
+        const demoCat = categories.find(c => c.id === 'Motivation') ? 'Motivation' : categories[0].id;
+        
         const mockResult: ProcessedResult = {
-            category: 'Motivation',
+            category: demoCat,
             subCategoryTitle: 'Viral Wisdom (Demo)',
             quotes: [
                 "Discipline is choosing between what you want now and what you want most.",
@@ -266,10 +268,10 @@ export const AddContent: React.FC = () => {
                 <div className="relative">
                   <select 
                     value={result.category}
-                    onChange={(e) => setResult({...result, category: e.target.value as CategoryName})}
+                    onChange={(e) => setResult({...result, category: e.target.value})}
                     className="w-full appearance-none bg-skin-hover text-skin-text font-bold text-lg p-3 rounded-xl border border-skin-border outline-none focus:border-brand-500 transition-colors"
                   >
-                    {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                    {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
                   </select>
                 </div>
               </div>
@@ -429,10 +431,10 @@ export const AddContent: React.FC = () => {
                   <label className="text-xs font-bold text-skin-muted uppercase tracking-wider block mb-2">Category</label>
                   <select 
                     value={manualCategory}
-                    onChange={(e) => setManualCategory(e.target.value as CategoryName)}
+                    onChange={(e) => setManualCategory(e.target.value)}
                     className="w-full bg-skin-base p-3 rounded-xl border border-skin-border outline-none focus:border-brand-500 transition-colors text-skin-text"
                   >
-                    {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                    {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
                   </select>
                 </div>
                 

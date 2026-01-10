@@ -2,24 +2,22 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useStore } from '../store/StoreContext';
-import { Copy, Trash2, Link as LinkIcon, CheckCircle2, Pencil, Check, X, Plus } from 'lucide-react';
-import { CategoryName } from '../types';
-
-const CATEGORIES: CategoryName[] = ['Flirty', 'Motivation', 'Relationships', 'Confidence', 'Mindset', 'Other'];
+import { Copy, Trash2, Link as LinkIcon, CheckCircle2, Pencil, Check, X, Plus, AlertTriangle } from 'lucide-react';
 
 export const SubCategoryDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { subCategories, deleteSubCategory, deleteQuote, updateSubCategory, addQuoteToSubCategory, updateQuote } = useStore();
+  const { subCategories, deleteSubCategory, deleteQuote, updateSubCategory, addQuoteToSubCategory, updateQuote, categories } = useStore();
   
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isEditingHeader, setIsEditingHeader] = useState(false);
   const [isAddingQuote, setIsAddingQuote] = useState(false);
   const [editingQuoteId, setEditingQuoteId] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Edit States
   const [editTitle, setEditTitle] = useState('');
-  const [editCategory, setEditCategory] = useState<CategoryName>('Other');
+  const [editCategory, setEditCategory] = useState<string>('Other');
   const [newQuoteText, setNewQuoteText] = useState('');
   const [editQuoteText, setEditQuoteText] = useState('');
 
@@ -34,10 +32,8 @@ export const SubCategoryDetails: React.FC = () => {
   }
 
   const handleDeleteCollection = () => {
-    if (window.confirm('Delete this entire collection?')) {
-      deleteSubCategory(subCategory.id);
-      navigate(-1);
-    }
+    deleteSubCategory(subCategory.id);
+    navigate(-1);
   };
 
   const handleCopy = (text: string, quoteId: string) => {
@@ -85,13 +81,47 @@ export const SubCategoryDetails: React.FC = () => {
       title={isEditingHeader ? "Edit Collection" : subCategory.title}
       headerAction={
         !isEditingHeader && (
-          <button onClick={handleDeleteCollection} className="text-skin-muted hover:text-red-500 p-2">
+          <button onClick={() => setShowDeleteConfirm(true)} className="text-skin-muted hover:text-red-500 p-2 transition-colors">
             <Trash2 size={20} />
           </button>
         )
       }
     >
-      <div className="space-y-6">
+      <div className="space-y-6 relative">
+        {/* Custom Confirmation Dialog */}
+        {showDeleteConfirm && (
+           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowDeleteConfirm(false)}></div>
+              <div className="bg-skin-card border border-skin-border rounded-2xl p-6 shadow-2xl relative z-10 w-full max-w-sm animate-bounce-short">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                      <div className="w-14 h-14 bg-red-100 dark:bg-red-500/20 text-red-600 rounded-full flex items-center justify-center">
+                          <Trash2 size={28} />
+                      </div>
+                      <div>
+                          <h3 className="text-xl font-bold text-skin-text">Delete Collection?</h3>
+                          <p className="text-skin-muted text-sm mt-2">
+                              Are you sure you want to delete <span className="font-semibold text-skin-text">"{subCategory.title}"</span>? This action cannot be undone.
+                          </p>
+                      </div>
+                      <div className="flex gap-3 w-full pt-2">
+                          <button 
+                              onClick={() => setShowDeleteConfirm(false)}
+                              className="flex-1 py-3 rounded-xl bg-skin-hover text-skin-text font-bold text-sm transition-colors"
+                          >
+                              Cancel
+                          </button>
+                          <button 
+                              onClick={handleDeleteCollection}
+                              className="flex-1 py-3 rounded-xl bg-red-600 text-white font-bold text-sm shadow-md active:scale-95 transition-all hover:bg-red-700"
+                          >
+                              Delete
+                          </button>
+                      </div>
+                  </div>
+              </div>
+           </div>
+        )}
+
         {/* Meta Header / Edit Header */}
         {isEditingHeader ? (
           <div className="bg-skin-card p-4 rounded-xl border border-skin-border shadow-sm space-y-3 animate-fade-in">
@@ -108,10 +138,10 @@ export const SubCategoryDetails: React.FC = () => {
               <label className="text-[10px] font-bold text-skin-muted uppercase tracking-wider block mb-1">Category</label>
               <select 
                 value={editCategory}
-                onChange={(e) => setEditCategory(e.target.value as CategoryName)}
+                onChange={(e) => setEditCategory(e.target.value)}
                 className="w-full bg-skin-base p-2 rounded-lg border border-skin-border outline-none focus:border-brand-500 text-sm"
               >
-                {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
               </select>
             </div>
             <div className="flex gap-2 pt-1">

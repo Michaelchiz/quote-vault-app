@@ -1,5 +1,14 @@
 
-export type CategoryName = 'Flirty' | 'Motivation' | 'Relationships' | 'Confidence' | 'Mindset' | 'Other';
+export type CategoryName = string;
+
+export interface Category {
+  id: string; // Effectively the name, e.g., 'Motivation'
+  label: string;
+  theme: string; // Tailwind classes for colors
+  icon?: string; // Key for the icon component
+  isPinned?: boolean;
+  isDefault?: boolean;
+}
 
 export interface Quote {
   id: string;
