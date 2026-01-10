@@ -81,7 +81,7 @@ export const SubCategoryDetails: React.FC = () => {
       title={isEditingHeader ? "Edit Collection" : subCategory.title}
       headerAction={
         !isEditingHeader && (
-          <button onClick={() => setShowDeleteConfirm(true)} className="text-skin-muted hover:text-red-500 p-2 transition-colors">
+          <button onClick={() => setShowDeleteConfirm(true)} className="text-skin-muted hover:text-red-500 p-2 transition-all active:scale-90">
             <Trash2 size={20} />
           </button>
         )
@@ -106,7 +106,7 @@ export const SubCategoryDetails: React.FC = () => {
                       <div className="flex gap-3 w-full pt-2">
                           <button 
                               onClick={() => setShowDeleteConfirm(false)}
-                              className="flex-1 py-3 rounded-xl bg-skin-hover text-skin-text font-bold text-sm transition-colors"
+                              className="flex-1 py-3 rounded-xl bg-skin-hover text-skin-text font-bold text-sm transition-all active:scale-95"
                           >
                               Cancel
                           </button>
@@ -145,10 +145,10 @@ export const SubCategoryDetails: React.FC = () => {
               </select>
             </div>
             <div className="flex gap-2 pt-1">
-              <button onClick={saveHeaderEdit} className="flex-1 bg-brand-600 text-white py-2 rounded-lg text-sm font-bold flex justify-center gap-1">
+              <button onClick={saveHeaderEdit} className="flex-1 bg-brand-600 text-white py-2 rounded-lg text-sm font-bold flex justify-center gap-1 active:scale-95 transition-all">
                 <Check size={16} /> Save
               </button>
-              <button onClick={() => setIsEditingHeader(false)} className="flex-1 bg-skin-hover text-skin-text py-2 rounded-lg text-sm font-medium">
+              <button onClick={() => setIsEditingHeader(false)} className="flex-1 bg-skin-hover text-skin-text py-2 rounded-lg text-sm font-medium active:scale-95 transition-all">
                 Cancel
               </button>
             </div>
@@ -159,7 +159,7 @@ export const SubCategoryDetails: React.FC = () => {
                 <span className="bg-skin-card border border-skin-border px-2 py-1 rounded-full text-skin-text font-medium">{subCategory.categoryId}</span>
                 <span>• {new Date(subCategory.createdAt).toLocaleDateString()}</span>
              </div>
-             <button onClick={startHeaderEdit} className="p-1.5 text-skin-muted hover:text-brand-600 hover:bg-skin-hover rounded-lg transition-colors">
+             <button onClick={startHeaderEdit} className="p-1.5 text-skin-muted hover:text-brand-600 hover:bg-skin-hover rounded-lg transition-all active:scale-90">
                <Pencil size={16} />
              </button>
           </div>
@@ -171,7 +171,7 @@ export const SubCategoryDetails: React.FC = () => {
           {!isAddingQuote ? (
             <button 
               onClick={() => setIsAddingQuote(true)}
-              className="w-full py-3 border-2 border-dashed border-skin-border rounded-xl text-skin-muted font-medium text-sm flex items-center justify-center gap-2 hover:border-brand-500/50 hover:text-brand-600 hover:bg-brand-500/5 transition-all"
+              className="w-full py-3 border-2 border-dashed border-skin-border rounded-xl text-skin-muted font-medium text-sm flex items-center justify-center gap-2 hover:border-brand-500/50 hover:text-brand-600 hover:bg-brand-500/5 transition-all active:scale-[0.98]"
             >
               <Plus size={18} /> Add Quote
             </button>
@@ -186,13 +186,13 @@ export const SubCategoryDetails: React.FC = () => {
                 autoFocus
               />
               <div className="flex justify-end gap-2">
-                 <button onClick={() => setIsAddingQuote(false)} className="p-2 text-skin-muted hover:bg-skin-hover rounded-lg">
+                 <button onClick={() => setIsAddingQuote(false)} className="p-2 text-skin-muted hover:bg-skin-hover rounded-lg active:scale-90 transition-all">
                     <X size={18} />
                  </button>
                  <button 
                   onClick={handleAddQuote} 
                   disabled={!newQuoteText.trim()}
-                  className="px-4 py-2 bg-brand-600 disabled:opacity-50 text-white rounded-lg text-sm font-bold flex items-center gap-1"
+                  className="px-4 py-2 bg-brand-600 disabled:opacity-50 text-white rounded-lg text-sm font-bold flex items-center gap-1 active:scale-95 transition-all"
                  >
                     Add <Check size={16} />
                  </button>
@@ -213,8 +213,8 @@ export const SubCategoryDetails: React.FC = () => {
                       autoFocus
                    />
                    <div className="flex justify-end gap-2">
-                      <button onClick={() => setEditingQuoteId(null)} className="px-3 py-1.5 text-sm font-medium text-skin-muted hover:text-skin-text">Cancel</button>
-                      <button onClick={() => saveQuoteEdit(quote.id)} className="px-3 py-1.5 bg-brand-600 text-white rounded-lg text-sm font-bold shadow-sm">Save</button>
+                      <button onClick={() => setEditingQuoteId(null)} className="px-3 py-1.5 text-sm font-medium text-skin-muted hover:text-skin-text active:scale-95 transition-all">Cancel</button>
+                      <button onClick={() => saveQuoteEdit(quote.id)} className="px-3 py-1.5 bg-brand-600 text-white rounded-lg text-sm font-bold shadow-sm active:scale-95 transition-all">Save</button>
                    </div>
                 </div>
               ) : (
@@ -230,7 +230,7 @@ export const SubCategoryDetails: React.FC = () => {
                           href={quote.sourceLink} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-skin-muted hover:text-brand-600 flex items-center gap-1 text-xs"
+                          className="text-skin-muted hover:text-brand-600 flex items-center gap-1 text-xs transition-colors"
                         >
                           <LinkIcon size={12} /> Source
                         </a>
@@ -240,21 +240,21 @@ export const SubCategoryDetails: React.FC = () => {
                     <div className="flex items-center gap-1">
                        <button 
                         onClick={() => startQuoteEdit(quote.id, quote.text)}
-                        className="p-2 text-skin-muted hover:text-brand-600 hover:bg-skin-hover rounded-lg transition-colors"
+                        className="p-2 text-skin-muted hover:text-brand-600 hover:bg-skin-hover rounded-lg transition-all active:scale-90"
                         title="Edit quote"
                       >
                         <Pencil size={16} />
                       </button>
                        <button 
                         onClick={() => deleteQuote(subCategory.id, quote.id)}
-                        className="p-2 text-skin-muted hover:text-red-500 hover:bg-skin-hover rounded-lg transition-colors"
+                        className="p-2 text-skin-muted hover:text-red-500 hover:bg-skin-hover rounded-lg transition-all active:scale-90"
                         title="Delete quote"
                       >
                         <Trash2 size={16} />
                       </button>
                       <button 
                         onClick={() => handleCopy(quote.text, quote.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all active:scale-95 ${
                           copiedId === quote.id 
                             ? 'bg-green-500/10 text-green-600' 
                             : 'bg-skin-hover text-skin-muted hover:bg-skin-border hover:text-skin-text'

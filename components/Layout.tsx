@@ -56,7 +56,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
             {/* Menu Header */}
             <div className="p-6 border-b border-skin-border flex items-center justify-between">
                <h2 className="text-xl font-bold text-skin-text tracking-tight">Menu</h2>
-               <button onClick={() => setIsMenuOpen(false)} className="text-skin-muted hover:text-skin-text">
+               <button 
+                 onClick={() => setIsMenuOpen(false)} 
+                 className="text-skin-muted hover:text-skin-text p-1 active:scale-90 transition-transform"
+               >
                  <X size={24} />
                </button>
             </div>
@@ -67,7 +70,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
                  <button
                    key={idx}
                    onClick={() => handleMenuClick(item.path)}
-                   className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-skin-hover text-skin-text transition-colors text-sm font-medium group"
+                   className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-skin-hover text-skin-text transition-all active:scale-[0.98] text-sm font-medium group"
                  >
                    <div className="flex items-center gap-3">
                      <span className="text-brand-500">{item.icon}</span>
@@ -80,7 +83,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
                <div className="pt-4 mt-4 border-t border-skin-border">
                  <button 
                     onClick={() => setIsThemeSelectorOpen(!isThemeSelectorOpen)}
-                    className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-skin-hover text-skin-text transition-colors text-sm font-medium"
+                    className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-skin-hover text-skin-text transition-all active:scale-[0.98] text-sm font-medium"
                  >
                     <div className="flex items-center gap-3">
                         <span className="text-brand-500"><Palette size={20} /></span>
@@ -101,7 +104,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
                             onClick={() => {
                               setTheme(t.id);
                             }}
-                            className={`w-full flex items-center justify-between p-2 rounded-lg border text-xs font-medium transition-all ${theme === t.id ? 'border-brand-500 bg-brand-500/10 text-brand-600' : 'border-skin-border bg-skin-card hover:bg-white text-skin-muted'}`}
+                            className={`w-full flex items-center justify-between p-2 rounded-lg border text-xs font-medium transition-all active:scale-[0.98] ${theme === t.id ? 'border-brand-500 bg-brand-500/10 text-brand-600' : 'border-skin-border bg-skin-card hover:bg-white text-skin-muted'}`}
                           >
                             <div className="flex items-center gap-2">
                               <div className={`w-4 h-4 rounded-full ${t.color}`}></div>
@@ -130,14 +133,14 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
           {showBack ? (
             <button 
               onClick={() => navigate(-1)}
-              className="p-2 -ml-2 text-skin-muted hover:text-skin-text active:bg-skin-hover rounded-full transition-colors"
+              className="p-2 -ml-2 text-skin-muted hover:text-skin-text active:bg-skin-hover rounded-full transition-all active:scale-90"
             >
               <ArrowLeft size={24} />
             </button>
           ) : (
             <button 
               onClick={() => setIsMenuOpen(true)}
-              className="p-2 -ml-2 text-skin-muted hover:text-skin-text active:bg-skin-hover rounded-full transition-colors"
+              className="p-2 -ml-2 text-skin-muted hover:text-skin-text active:bg-skin-hover rounded-full transition-all active:scale-90"
             >
               <Menu size={24} />
             </button>
@@ -160,7 +163,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
       <nav className="flex-none h-16 bg-skin-card border-t border-skin-border flex items-center justify-around z-20 pb-safe transition-colors duration-300">
         <button 
           onClick={() => navigate('/')}
-          className={`flex flex-col items-center gap-1 p-2 w-16 rounded-lg transition-colors ${isActive('/') ? 'text-brand-600' : 'text-skin-muted hover:text-skin-text'}`}
+          className={`flex flex-col items-center gap-1 p-2 w-16 rounded-lg transition-all active:scale-90 ${isActive('/') ? 'text-brand-600' : 'text-skin-muted hover:text-skin-text'}`}
         >
           <HomeIcon size={24} strokeWidth={isActive('/') ? 2.5 : 2} />
           <span className="text-[10px] font-medium">Home</span>
@@ -168,7 +171,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
 
         <button 
           onClick={() => navigate('/add')}
-          className={`flex flex-col items-center gap-1 p-2 w-16 rounded-lg transition-colors ${isActive('/add') ? 'text-brand-600' : 'text-skin-muted hover:text-skin-text'}`}
+          className={`flex flex-col items-center gap-1 p-2 w-16 rounded-lg transition-all active:scale-90 ${isActive('/add') ? 'text-brand-600' : 'text-skin-muted hover:text-skin-text'}`}
         >
           <PlusSquare size={24} strokeWidth={isActive('/add') ? 2.5 : 2} />
           <span className="text-[10px] font-medium">Add</span>
@@ -176,7 +179,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
 
         <button 
           onClick={() => navigate('/search')}
-          className={`flex flex-col items-center gap-1 p-2 w-16 rounded-lg transition-colors ${isActive('/search') ? 'text-brand-600' : 'text-skin-muted hover:text-skin-text'}`}
+          className={`flex flex-col items-center gap-1 p-2 w-16 rounded-lg transition-all active:scale-90 ${isActive('/search') ? 'text-brand-600' : 'text-skin-muted hover:text-skin-text'}`}
         >
           <Search size={24} strokeWidth={isActive('/search') ? 2.5 : 2} />
           <span className="text-[10px] font-medium">Search</span>

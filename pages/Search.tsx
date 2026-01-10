@@ -77,7 +77,7 @@ export const Search: React.FC = () => {
           <button 
             onClick={handleAiSearch}
             disabled={!query.trim() || isAiLoading}
-            className="absolute right-2 top-2 p-1.5 rounded-lg bg-brand-50 text-brand-600 hover:bg-brand-100 disabled:opacity-50 disabled:bg-transparent disabled:text-skin-muted transition-colors"
+            className="absolute right-2 top-2 p-1.5 rounded-lg bg-brand-50 text-brand-600 hover:bg-brand-100 disabled:opacity-50 disabled:bg-transparent disabled:text-skin-muted transition-all active:scale-90"
             title="AI Search"
           >
             {isAiLoading ? (
@@ -122,7 +122,7 @@ export const Search: React.FC = () => {
                             <span className="text-xs font-bold text-brand-600 uppercase tracking-wide">{item.subCategoryTitle}</span>
                             <button 
                                 onClick={() => handleCopy(item.quote.text, item.quote.id)}
-                                className={`p-2 rounded-lg transition-all ${
+                                className={`p-2 rounded-lg transition-all active:scale-90 ${
                                 copiedId === item.quote.id 
                                     ? 'bg-green-500/10 text-green-600' 
                                     : 'text-brand-400 hover:text-brand-600 hover:bg-brand-100'
@@ -185,7 +185,7 @@ export const Search: React.FC = () => {
                     <span className="font-semibold text-skin-text opacity-70">{item.subCategoryTitle}</span>
                     <button 
                         onClick={() => handleCopy(item.quote.text, item.quote.id)}
-                        className={`flex items-center gap-1 hover:text-skin-text transition-colors ${copiedId === item.quote.id ? 'text-green-600' : ''}`}
+                        className={`flex items-center gap-1 hover:text-skin-text transition-all active:scale-95 ${copiedId === item.quote.id ? 'text-green-600' : ''}`}
                     >
                         {copiedId === item.quote.id ? (
                            <>Copied <CheckCircle2 size={12} /></>

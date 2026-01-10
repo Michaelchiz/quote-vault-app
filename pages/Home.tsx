@@ -105,7 +105,7 @@ export const Home: React.FC = () => {
             </p>
             <button 
                 onClick={() => navigate('/add')}
-                className="bg-white text-brand-700 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm active:scale-95 transition-transform hover:bg-brand-50"
+                className="bg-white text-brand-700 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm active:scale-95 transition-all hover:bg-brand-50"
             >
                 + Add New Quote
             </button>
@@ -118,7 +118,7 @@ export const Home: React.FC = () => {
              <h3 className="text-lg font-bold text-skin-text">Categories</h3>
              <button 
                 onClick={() => setIsManageMode(!isManageMode)}
-                className={`p-2 rounded-lg transition-colors ${isManageMode ? 'bg-brand-600 text-white' : 'text-skin-muted hover:bg-skin-hover'}`}
+                className={`p-2 rounded-lg transition-all active:scale-90 ${isManageMode ? 'bg-brand-600 text-white' : 'text-skin-muted hover:bg-skin-hover'}`}
                 title="Manage Categories"
              >
                 <Settings2 size={18} />
@@ -157,7 +157,7 @@ export const Home: React.FC = () => {
                                     e.stopPropagation();
                                     togglePinCategory(cat.id);
                                 }}
-                                className={`p-1.5 rounded-full shadow-sm transition-all ${
+                                className={`p-1.5 rounded-full shadow-sm transition-all active:scale-90 ${
                                     cat.isPinned 
                                     ? 'bg-brand-100 text-brand-600 dark:bg-brand-800 dark:text-brand-300' 
                                     : 'bg-skin-card text-skin-muted hover:text-brand-500 border border-skin-border'
@@ -173,7 +173,7 @@ export const Home: React.FC = () => {
                                         e.stopPropagation();
                                         deleteCategory(cat.id);
                                     }}
-                                    className="bg-red-500 text-white p-1.5 rounded-full shadow-md hover:scale-110 transition-transform"
+                                    className="bg-red-500 text-white p-1.5 rounded-full shadow-md hover:scale-110 active:scale-95 transition-transform"
                                 >
                                     <X size={12} strokeWidth={3} />
                                 </button>
@@ -188,7 +188,7 @@ export const Home: React.FC = () => {
             {!isAdding ? (
                 <button 
                     onClick={() => setIsAdding(true)}
-                    className="bg-skin-card border-2 border-dashed border-skin-border rounded-2xl flex flex-col items-center justify-center gap-2 p-4 min-h-[100px] text-skin-muted hover:border-brand-500 hover:text-brand-600 transition-colors"
+                    className="bg-skin-card border-2 border-dashed border-skin-border rounded-2xl flex flex-col items-center justify-center gap-2 p-4 min-h-[100px] text-skin-muted hover:border-brand-500 hover:text-brand-600 transition-all active:scale-[0.98]"
                 >
                     <Plus size={24} />
                     <span className="text-xs font-bold">Add Category</span>
@@ -215,8 +215,8 @@ export const Home: React.FC = () => {
                                 onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                             />
                             <div className="flex gap-2">
-                                <button onClick={() => setIsAdding(false)} className="flex-1 bg-skin-hover text-skin-muted py-1.5 rounded text-xs font-bold">Cancel</button>
-                                <button onClick={handleAdd} disabled={!newCategoryName} className="flex-1 bg-brand-600 text-white py-1.5 rounded text-xs font-bold disabled:opacity-50">Add</button>
+                                <button onClick={() => setIsAdding(false)} className="flex-1 bg-skin-hover text-skin-muted py-1.5 rounded text-xs font-bold active:scale-95 transition-transform">Cancel</button>
+                                <button onClick={handleAdd} disabled={!newCategoryName} className="flex-1 bg-brand-600 text-white py-1.5 rounded text-xs font-bold disabled:opacity-50 active:scale-95 transition-transform">Add</button>
                             </div>
                         </>
                     )}
@@ -258,7 +258,7 @@ export const Home: React.FC = () => {
                 <button
                   key={sc.id}
                   onClick={() => navigate(`/subcategory/${sc.id}`)}
-                  className="w-full bg-skin-card p-4 rounded-2xl shadow-sm border border-skin-border flex items-center justify-between hover:border-brand-500/50 transition-colors"
+                  className="w-full bg-skin-card p-4 rounded-2xl shadow-sm border border-skin-border flex items-center justify-between hover:border-brand-500/50 transition-all active:scale-[0.98]"
                 >
                   <div className="text-left">
                     <h4 className="font-semibold text-skin-text text-sm">{sc.title}</h4>

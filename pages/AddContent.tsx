@@ -143,7 +143,7 @@ export const AddContent: React.FC = () => {
         </p>
         <button 
           onClick={reset}
-          className="px-6 py-2 border border-white/30 rounded-full text-sm font-medium hover:bg-white/10 transition-colors"
+          className="px-6 py-2 border border-white/30 rounded-full text-sm font-medium hover:bg-white/10 transition-colors active:scale-95"
         >
           Cancel
         </button>
@@ -291,7 +291,7 @@ export const AddContent: React.FC = () => {
                 <h3 className="text-xs font-bold text-skin-muted uppercase tracking-wider">Extracted Quotes ({result.quotes.length})</h3>
                 <button 
                     onClick={() => setResult({...result, quotes: [...result.quotes, ""]})}
-                    className="text-xs text-brand-600 font-bold hover:underline bg-brand-500/10 px-2 py-1 rounded-md"
+                    className="text-xs text-brand-600 font-bold hover:underline bg-brand-500/10 px-2 py-1 rounded-md active:scale-95 transition-all"
                 >
                     + Add
                 </button>
@@ -314,7 +314,7 @@ export const AddContent: React.FC = () => {
                      const newQuotes = result.quotes.filter((_, i) => i !== idx);
                      setResult({...result, quotes: newQuotes});
                   }}
-                  className="text-skin-muted hover:text-red-500 h-fit p-1 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                  className="text-skin-muted hover:text-red-500 h-fit p-1 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all active:scale-90"
                 >
                   <Trash2 size={18} />
                 </button>
@@ -332,7 +332,7 @@ export const AddContent: React.FC = () => {
             
             <button
                 onClick={reset}
-                className="w-full text-skin-muted py-3 font-medium hover:text-skin-text"
+                className="w-full text-skin-muted py-3 font-medium hover:text-skin-text active:scale-[0.98] transition-all"
             >
                 Discard
             </button>
@@ -350,19 +350,19 @@ export const AddContent: React.FC = () => {
         {/* Mode Toggle */}
         <div className="bg-skin-card p-1.5 rounded-xl flex font-medium border border-skin-border shadow-sm">
           <button 
-            className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 ${mode === 'upload' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`}
+            className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 active:scale-95 ${mode === 'upload' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`}
             onClick={() => setMode('upload')}
           >
             Upload
           </button>
           <button 
-            className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 ${mode === 'link' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`}
+            className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 active:scale-95 ${mode === 'link' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`}
             onClick={() => setMode('link')}
           >
             Link
           </button>
           <button 
-            className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 ${mode === 'manual' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`}
+            className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 active:scale-95 ${mode === 'manual' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`}
             onClick={() => setMode('manual')}
           >
             Manual
@@ -371,7 +371,7 @@ export const AddContent: React.FC = () => {
 
         {mode === 'upload' && (
           <div 
-            className="group bg-skin-card border-2 border-dashed border-skin-border rounded-3xl p-10 flex flex-col items-center justify-center text-center space-y-6 hover:border-brand-500/50 hover:bg-skin-hover transition-all cursor-pointer" 
+            className="group bg-skin-card border-2 border-dashed border-skin-border rounded-3xl p-10 flex flex-col items-center justify-center text-center space-y-6 hover:border-brand-500/50 hover:bg-skin-hover transition-all active:scale-[0.99] cursor-pointer" 
             onClick={() => fileInputRef.current?.click()}
           >
             <input 

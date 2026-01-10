@@ -98,9 +98,9 @@ export const Dashboard: React.FC = () => {
                 <button 
                     onClick={handleClaim}
                     disabled={!canClaim()}
-                    className={`w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
+                    className={`w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${
                         canClaim() 
-                        ? 'bg-white text-brand-700 shadow-lg active:scale-95' 
+                        ? 'bg-white text-brand-700 shadow-lg' 
                         : 'bg-brand-900/40 text-brand-200/50 cursor-default'
                     }`}
                 >
@@ -137,7 +137,7 @@ export const Dashboard: React.FC = () => {
                   <button
                       key={filter.id}
                       onClick={() => setDateFilter(filter.id as DateFilter)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-colors border ${
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all active:scale-95 border ${
                           dateFilter === filter.id
                           ? 'bg-brand-600 text-white border-brand-600'
                           : 'bg-skin-card text-skin-muted border-skin-border hover:border-brand-300 hover:text-skin-text'
@@ -154,7 +154,7 @@ export const Dashboard: React.FC = () => {
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide rounded-lg transition-all flex items-center justify-center gap-2 ${
+                        className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide rounded-lg transition-all active:scale-95 flex items-center justify-center gap-2 ${
                             activeTab === tab 
                             ? 'bg-skin-hover text-brand-600 shadow-sm' 
                             : 'text-skin-muted hover:text-skin-text'
@@ -175,7 +175,7 @@ export const Dashboard: React.FC = () => {
                     </div>
                 ) : (
                     filteredHistory.map(item => (
-                        <div key={item.id} className="bg-skin-card p-3 rounded-xl border border-skin-border shadow-sm flex items-center gap-3 group">
+                        <div key={item.id} className="bg-skin-card p-3 rounded-xl border border-skin-border shadow-sm flex items-center gap-3 group transition-all active:scale-[0.99]">
                              <div className="w-10 h-10 rounded-full bg-skin-hover flex items-center justify-center shrink-0">
                                  <PlatformIcon type={item.platform} size={20} />
                              </div>
@@ -197,7 +197,7 @@ export const Dashboard: React.FC = () => {
                              <div className="flex items-center gap-1">
                                  <button 
                                      onClick={() => handleCopy(item.url, item.id)}
-                                     className={`p-2 rounded-lg transition-all ${
+                                     className={`p-2 rounded-lg transition-all active:scale-90 ${
                                          copiedLinkId === item.id 
                                          ? 'text-green-600 bg-green-500/10' 
                                          : 'text-skin-muted hover:bg-skin-hover hover:text-brand-600'
@@ -207,7 +207,7 @@ export const Dashboard: React.FC = () => {
                                  </button>
                                  <button 
                                      onClick={() => deleteLinkFromHistory(item.id)}
-                                     className="p-2 rounded-lg text-skin-muted hover:bg-red-500/10 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                     className="p-2 rounded-lg text-skin-muted hover:bg-red-500/10 hover:text-red-500 transition-all active:scale-90 opacity-0 group-hover:opacity-100 focus:opacity-100"
                                  >
                                      <Trash2 size={16} />
                                  </button>

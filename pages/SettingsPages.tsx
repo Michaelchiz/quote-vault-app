@@ -16,7 +16,7 @@ export const ContactPage: React.FC = () => {
             Have a question, issue, or just want to say hello? We'd love to hear from you.
           </p>
           
-          <a href="mailto:support@quotevault.app" className="block w-full bg-brand-600 text-white py-3 rounded-xl font-bold hover:bg-brand-700 transition-colors">
+          <a href="mailto:support@quotevault.app" className="block w-full bg-brand-600 text-white py-3 rounded-xl font-bold hover:bg-brand-700 transition-all active:scale-[0.98]">
             support@quotevault.app
           </a>
           
@@ -137,7 +137,7 @@ export const LanguagePage: React.FC = () => {
         </p>
 
         <div className="bg-skin-card rounded-2xl border border-skin-border overflow-hidden">
-          <button className="w-full flex items-center justify-between p-4 hover:bg-skin-hover transition-colors">
+          <button className="w-full flex items-center justify-between p-4 hover:bg-skin-hover transition-all active:scale-[0.99]">
             <div className="flex items-center gap-3">
               <span className="text-2xl">🇺🇸</span>
               <span className="font-medium text-skin-text">English</span>
