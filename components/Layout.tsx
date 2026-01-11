@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Home as HomeIcon, PlusSquare, Search, ArrowLeft, Menu, X, User, Info, Star, Globe, MessageSquare, Mail, FileText, Shield, Palette, Check, ChevronRight } from 'lucide-react';
+import { Home as HomeIcon, PlusSquare, Search, ArrowLeft, Menu, X, User, Info, Star, Globe, MessageSquare, Mail, FileText, Shield, Palette, Check, ChevronRight, Crown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTheme, Theme } from '../store/ThemeContext';
+import { useStore } from '../store/StoreContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,6 +15,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, setTheme } = useTheme();
+  const { userAccount } = useStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isThemeSelectorOpen, setIsThemeSelectorOpen] = useState(false);
 
@@ -55,7 +57,14 @@ export const Layout: React.FC<LayoutProps> = ({ children, showBack, title, heade
           <div className="relative w-72 bg-skin-card h-full shadow-2xl flex flex-col animate-slide-in-left border-r border-skin-border">
             {/* Menu Header */}
             <div className="p-6 border-b border-skin-border flex items-center justify-between">
-               <h2 className="text-xl font-bold text-skin-text tracking-tight">Menu</h2>
+               <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-skin-text tracking-tight">Menu</h2>
+                    {userAccount.isPremium && (
+                        <span className="flex items-center gap-1 bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full text-[10px] font-black border border-amber-500/20">
+                            <Crown size={10} className="fill-current" /> PRO
+                        </span>
+                    )}
+               </div>
                <button 
                  onClick={() => setIsMenuOpen(false)} 
                  className="text-skin-muted hover:text-skin-text p-1 active:scale-90 transition-transform"

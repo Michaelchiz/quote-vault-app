@@ -2,16 +2,16 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { geminiService } from '../services/geminiService';
-import { useStore } from '../store/StoreContext';
+import { useStore, FREE_QUOTE_LIMIT } from '../store/StoreContext';
 import { ProcessedResult, SubCategory } from '../types';
-import { Image as ImageIcon, Link as LinkIcon, Loader2, Check, AlertCircle, Trash2, ArrowRight, RefreshCw, Wand2, PenTool } from 'lucide-react';
+import { Image as ImageIcon, Link as LinkIcon, Loader2, Check, AlertCircle, Trash2, ArrowRight, RefreshCw, Wand2, PenTool, Crown, ShieldCheck } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 
-type ViewState = 'input' | 'processing' | 'review' | 'success' | 'failure';
+type ViewState = 'input' | 'processing' | 'review' | 'success' | 'failure' | 'upgrade';
 
 export const AddContent: React.FC = () => {
   const navigate = useNavigate();
-  const { addSubCategory, addLinkToHistory, categories } = useStore();
+  const { addSubCategory, addLinkToHistory, categories, userAccount, totalQuotes, upgradeToPro } = useStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [viewState, setViewState] = useState<ViewState>('input');
@@ -41,6 +41,14 @@ export const AddContent: React.FC = () => {
     setSavedId(null);
   };
 
+  const checkLimit = (newCount: number) => {
+    if (!userAccount.isPremium && (totalQuotes + newCount) > FREE_QUOTE_LIMIT) {
+        setViewState('upgrade');
+        return false;
+    }
+    return true;
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const files: File[] = Array.from(e.target.files);
@@ -62,20 +70,13 @@ export const AddContent: React.FC = () => {
   const handleLinkSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!linkInput) return;
-
     setSourceLink(linkInput);
-    
-    // Add to history immediately
     addLinkToHistory(linkInput);
-
     setViewState('processing');
     setErrorMsg(null);
 
-    // Simulate Processing for Demo
     setTimeout(() => {
-        // Find Motivation if exists, else use first avail
         const demoCat = categories.find(c => c.id === 'Motivation') ? 'Motivation' : categories[0].id;
-        
         const mockResult: ProcessedResult = {
             category: demoCat,
             subCategoryTitle: 'Viral Wisdom (Demo)',
@@ -85,7 +86,6 @@ export const AddContent: React.FC = () => {
                 "The magic you're looking for is in the work you're avoiding."
             ]
         };
-        
         setResult(mockResult);
         setViewState('review');
     }, 2500);
@@ -94,7 +94,6 @@ export const AddContent: React.FC = () => {
   const handleManualSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!manualTitle || !manualQuote) return;
-
     const data: ProcessedResult = {
         category: manualCategory,
         subCategoryTitle: manualTitle,
@@ -106,6 +105,7 @@ export const AddContent: React.FC = () => {
 
   const handleSave = () => {
     if (!result) return;
+    if (!checkLimit(result.quotes.length)) return;
     
     const newId = uuidv4();
     const newSubCategory: SubCategory = {
@@ -126,7 +126,69 @@ export const AddContent: React.FC = () => {
     setViewState('success');
   };
 
+  const handleUpgrade = () => {
+    upgradeToPro();
+    setViewState('review'); // Return to review to allow saving
+  };
+
   // --- Views ---
+
+  if (viewState === 'upgrade') {
+    return (
+      <div className="h-screen bg-slate-950 flex flex-col p-6 text-white overflow-y-auto no-scrollbar animate-fade-in">
+        <div className="flex-1 flex flex-col items-center justify-center text-center py-10 space-y-6">
+            <div className="w-24 h-24 bg-gradient-to-tr from-amber-500 to-violet-500 rounded-3xl flex items-center justify-center shadow-2xl shadow-amber-500/20 animate-bounce-short">
+                <Crown size={54} strokeWidth={2.5} />
+            </div>
+            
+            <div className="space-y-3 px-4">
+                <h2 className="text-3xl font-extrabold tracking-tight">Vault Pro</h2>
+                <p className="text-slate-400 text-lg">You've reached the free limit of {FREE_QUOTE_LIMIT} quotes.</p>
+            </div>
+
+            <div className="w-full space-y-4 pt-6 max-w-xs">
+                <div className="flex items-start gap-4 text-left">
+                    <div className="bg-amber-500/20 p-1 rounded-full text-amber-500"><Check size={18} strokeWidth={3} /></div>
+                    <div>
+                        <p className="font-bold">Unlimited Storage</p>
+                        <p className="text-sm text-slate-400">Save thousands of collections and lines.</p>
+                    </div>
+                </div>
+                <div className="flex items-start gap-4 text-left">
+                    <div className="bg-amber-500/20 p-1 rounded-full text-amber-500"><Check size={18} strokeWidth={3} /></div>
+                    <div>
+                        <p className="font-bold">Priority AI Processing</p>
+                        <p className="text-sm text-slate-400">Faster analysis and smarter categorization.</p>
+                    </div>
+                </div>
+                <div className="flex items-start gap-4 text-left">
+                    <div className="bg-amber-500/20 p-1 rounded-full text-amber-500"><Check size={18} strokeWidth={3} /></div>
+                    <div>
+                        <p className="font-bold">Pro Badge</p>
+                        <p className="text-sm text-slate-400">Show your status in the vault.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div className="space-y-3 pb-8">
+            <button 
+                onClick={handleUpgrade}
+                className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-4 rounded-2xl font-black text-xl shadow-xl active:scale-95 transition-all flex flex-col items-center leading-tight"
+            >
+                <span>Upgrade for $3.99/mo</span>
+                <span className="text-xs opacity-70">Cancel anytime.</span>
+            </button>
+            <button 
+                onClick={reset}
+                className="w-full text-slate-500 py-2 text-sm font-medium hover:text-white transition-colors"
+            >
+                Maybe Later
+            </button>
+        </div>
+      </div>
+    );
+  }
 
   if (viewState === 'processing') {
     return (
@@ -197,50 +259,11 @@ export const AddContent: React.FC = () => {
         }`}>
           {isLinkFailure ? <ImageIcon size={36} /> : <AlertCircle size={36} />}
         </div>
-        
-        <h2 className="text-2xl font-bold mb-3">
-            {isLinkFailure ? 'Screenshots Required' : 'Processing Failed'}
-        </h2>
-        
-        <p className="text-slate-300 mb-8 max-w-xs mx-auto leading-relaxed text-sm">
-          {errorMsg || "Something went wrong while processing your content."}
-        </p>
-        
+        <h2 className="text-2xl font-bold mb-3">{isLinkFailure ? 'Screenshots Required' : 'Processing Failed'}</h2>
+        <p className="text-slate-300 mb-8 max-w-xs mx-auto leading-relaxed text-sm">{errorMsg || "Something went wrong while processing your content."}</p>
         <div className="w-full max-w-sm space-y-3">
-          {isLinkFailure ? (
-             <>
-               <button 
-                 onClick={() => {
-                    setMode('upload');
-                    setViewState('input');
-                 }}
-                 className="w-full bg-white text-slate-900 py-3.5 rounded-xl font-bold shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 hover:bg-slate-50"
-               >
-                 <ImageIcon size={20} /> Switch to Screenshot Upload
-               </button>
-               
-               <button 
-                onClick={reset}
-                className="w-full bg-slate-800 border border-slate-700 text-slate-300 py-3.5 rounded-xl font-semibold active:scale-[0.98] transition-all flex items-center justify-center gap-2 hover:bg-slate-700 hover:text-white"
-              >
-                <RefreshCw size={18} /> Try Another Link
-              </button>
-             </>
-          ) : (
-            <button 
-              onClick={reset}
-              className="w-full bg-white text-slate-900 py-3.5 rounded-xl font-bold shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 hover:bg-slate-50"
-            >
-              <RefreshCw size={20} /> Try Again
-            </button>
-          )}
-          
-          <button 
-            onClick={() => navigate('/')}
-            className={`w-full py-3 rounded-xl font-medium transition-colors ${isLinkFailure ? 'text-slate-400 hover:text-white' : 'bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'}`}
-          >
-            {isLinkFailure ? 'Cancel' : 'Go to Home'}
-          </button>
+          <button onClick={reset} className="w-full bg-white text-slate-900 py-3.5 rounded-xl font-bold shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 hover:bg-slate-50"><RefreshCw size={20} /> Try Again</button>
+          <button onClick={() => navigate('/')} className={`w-full py-3 rounded-xl font-medium transition-colors ${isLinkFailure ? 'text-slate-400 hover:text-white' : 'bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'}`}>Go to Home</button>
         </div>
       </div>
     );
@@ -255,7 +278,7 @@ export const AddContent: React.FC = () => {
                <div className="bg-amber-500/20 p-1.5 rounded-lg text-amber-600 mt-0.5"><Wand2 size={16} /></div>
                <div className="text-xs text-amber-800 dark:text-amber-200">
                  <span className="font-bold block mb-0.5">Demo Simulation Active</span>
-                 Actual link scraping is disabled in this demo environment. We've generated example content to show you the workflow.
+                 Actual link scraping is disabled in this demo environment. We've generated example content.
                </div>
             </div>
           )}
@@ -323,6 +346,18 @@ export const AddContent: React.FC = () => {
           </div>
 
           <div className="pt-2 space-y-3">
+            {!userAccount.isPremium && (
+                <div className="bg-amber-500/10 p-3 rounded-xl flex items-center justify-between border border-amber-500/20">
+                    <div className="flex items-center gap-2">
+                        <Crown size={16} className="text-amber-500" />
+                        <span className="text-xs font-bold text-amber-700 dark:text-amber-200">
+                            Usage: {totalQuotes}/{FREE_QUOTE_LIMIT} quotes
+                        </span>
+                    </div>
+                    <span className="text-[10px] text-amber-600 font-black uppercase">Free Tier</span>
+                </div>
+            )}
+            
             <button
                 onClick={handleSave}
                 className="w-full bg-brand-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2"
@@ -346,49 +381,17 @@ export const AddContent: React.FC = () => {
   return (
     <Layout title="Add Content">
       <div className="space-y-8 mt-2">
-        
-        {/* Mode Toggle */}
         <div className="bg-skin-card p-1.5 rounded-xl flex font-medium border border-skin-border shadow-sm">
-          <button 
-            className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 active:scale-95 ${mode === 'upload' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`}
-            onClick={() => setMode('upload')}
-          >
-            Upload
-          </button>
-          <button 
-            className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 active:scale-95 ${mode === 'link' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`}
-            onClick={() => setMode('link')}
-          >
-            Link
-          </button>
-          <button 
-            className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 active:scale-95 ${mode === 'manual' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`}
-            onClick={() => setMode('manual')}
-          >
-            Manual
-          </button>
+          <button className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 active:scale-95 ${mode === 'upload' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`} onClick={() => setMode('upload')}>Upload</button>
+          <button className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 active:scale-95 ${mode === 'link' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`} onClick={() => setMode('link')}>Link</button>
+          <button className={`flex-1 py-2.5 rounded-lg text-sm transition-all duration-200 active:scale-95 ${mode === 'manual' ? 'bg-skin-hover shadow-sm text-brand-600 font-bold border border-skin-border' : 'text-skin-muted hover:text-skin-text'}`} onClick={() => setMode('manual')}>Manual</button>
         </div>
 
         {mode === 'upload' && (
-          <div 
-            className="group bg-skin-card border-2 border-dashed border-skin-border rounded-3xl p-10 flex flex-col items-center justify-center text-center space-y-6 hover:border-brand-500/50 hover:bg-skin-hover transition-all active:scale-[0.99] cursor-pointer" 
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <input 
-              type="file" 
-              multiple 
-              accept="image/*" 
-              className="hidden" 
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-            />
-            <div className="w-20 h-20 bg-skin-base rounded-full flex items-center justify-center text-skin-muted group-hover:bg-brand-500/10 group-hover:text-brand-600 transition-colors">
-              <ImageIcon size={40} />
-            </div>
-            <div>
-              <p className="font-bold text-skin-text text-lg group-hover:text-brand-600">Upload Screenshots</p>
-              <p className="text-sm text-skin-muted mt-2">Select images from your TikTok or Instagram carousel.</p>
-            </div>
+          <div className="group bg-skin-card border-2 border-dashed border-skin-border rounded-3xl p-10 flex flex-col items-center justify-center text-center space-y-6 hover:border-brand-500/50 hover:bg-skin-hover transition-all active:scale-[0.99] cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+            <input type="file" multiple accept="image/*" className="hidden" ref={fileInputRef} onChange={handleFileUpload} />
+            <div className="w-20 h-20 bg-skin-base rounded-full flex items-center justify-center text-skin-muted group-hover:bg-brand-500/10 group-hover:text-brand-600 transition-colors"><ImageIcon size={40} /></div>
+            <div><p className="font-bold text-skin-text text-lg group-hover:text-brand-600">Upload Screenshots</p><p className="text-sm text-skin-muted mt-2">Select images from your TikTok or Instagram carousel.</p></div>
           </div>
         )}
         
@@ -396,31 +399,9 @@ export const AddContent: React.FC = () => {
           <form onSubmit={handleLinkSubmit} className="space-y-6">
             <div className="bg-skin-card border border-skin-border rounded-2xl p-6 shadow-sm focus-within:ring-2 focus-within:ring-brand-500/20 focus-within:border-brand-500/50 transition-all">
               <label className="block text-xs font-bold text-skin-muted uppercase tracking-wider mb-3">Paste Link</label>
-              <div className="flex gap-2">
-                <input 
-                  type="url" 
-                  placeholder="https://tiktok.com/..."
-                  className="flex-1 bg-transparent text-skin-text placeholder:text-skin-muted outline-none font-medium text-lg"
-                  value={linkInput}
-                  onChange={(e) => setLinkInput(e.target.value)}
-                  autoFocus
-                />
-              </div>
+              <div className="flex gap-2"><input type="url" placeholder="https://tiktok.com/..." className="flex-1 bg-transparent text-skin-text placeholder:text-skin-muted outline-none font-medium text-lg" value={linkInput} onChange={(e) => setLinkInput(e.target.value)} autoFocus /></div>
             </div>
-            
-            <button 
-              type="submit" 
-              disabled={!linkInput}
-              className="w-full bg-brand-600 disabled:bg-skin-border disabled:text-skin-muted text-white py-4 rounded-xl font-bold shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"
-            >
-              <LinkIcon size={22} />
-              Process Link
-            </button>
-            
-            <div className="flex items-start gap-3 bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl text-blue-500 text-sm">
-                <div className="shrink-0 mt-0.5"><AlertCircle size={18} /></div>
-                <p>Ensure the link is public. This feature extracts text from the post's images automatically.</p>
-            </div>
+            <button type="submit" disabled={!linkInput} className="w-full bg-brand-600 disabled:bg-skin-border disabled:text-skin-muted text-white py-4 rounded-xl font-bold shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"><LinkIcon size={22} />Process Link</button>
           </form>
         )}
 
@@ -429,48 +410,20 @@ export const AddContent: React.FC = () => {
              <div className="bg-skin-card p-5 rounded-2xl border border-skin-border space-y-4 shadow-sm">
                 <div>
                   <label className="text-xs font-bold text-skin-muted uppercase tracking-wider block mb-2">Category</label>
-                  <select 
-                    value={manualCategory}
-                    onChange={(e) => setManualCategory(e.target.value)}
-                    className="w-full bg-skin-base p-3 rounded-xl border border-skin-border outline-none focus:border-brand-500 transition-colors text-skin-text"
-                  >
+                  <select value={manualCategory} onChange={(e) => setManualCategory(e.target.value)} className="w-full bg-skin-base p-3 rounded-xl border border-skin-border outline-none focus:border-brand-500 transition-colors text-skin-text">
                     {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
                   </select>
                 </div>
-                
                 <div>
                   <label className="text-xs font-bold text-skin-muted uppercase tracking-wider block mb-2">Collection Title</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Gym Motivation"
-                    value={manualTitle}
-                    onChange={(e) => setManualTitle(e.target.value)}
-                    className="w-full bg-skin-base p-3 rounded-xl border border-skin-border outline-none focus:border-brand-500 transition-colors text-skin-text"
-                    required
-                  />
+                  <input type="text" placeholder="e.g. Gym Motivation" value={manualTitle} onChange={(e) => setManualTitle(e.target.value)} className="w-full bg-skin-base p-3 rounded-xl border border-skin-border outline-none focus:border-brand-500 transition-colors text-skin-text" required />
                 </div>
-                
                 <div>
                   <label className="text-xs font-bold text-skin-muted uppercase tracking-wider block mb-2">Quote</label>
-                  <textarea 
-                    placeholder="Type your quote here..."
-                    rows={4}
-                    value={manualQuote}
-                    onChange={(e) => setManualQuote(e.target.value)}
-                    className="w-full bg-skin-base p-3 rounded-xl border border-skin-border outline-none focus:border-brand-500 transition-colors text-skin-text resize-none"
-                    required
-                  />
+                  <textarea placeholder="Type your quote here..." rows={4} value={manualQuote} onChange={(e) => setManualQuote(e.target.value)} className="w-full bg-skin-base p-3 rounded-xl border border-skin-border outline-none focus:border-brand-500 transition-colors text-skin-text resize-none" required />
                 </div>
              </div>
-
-             <button 
-              type="submit" 
-              disabled={!manualTitle || !manualQuote}
-              className="w-full bg-brand-600 disabled:bg-skin-border disabled:text-skin-muted text-white py-4 rounded-xl font-bold shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"
-            >
-              <PenTool size={20} />
-              Create Quote
-            </button>
+             <button type="submit" disabled={!manualTitle || !manualQuote} className="w-full bg-brand-600 disabled:bg-skin-border disabled:text-skin-muted text-white py-4 rounded-xl font-bold shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"><PenTool size={20} />Create Quote</button>
            </form>
         )}
       </div>

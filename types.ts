@@ -42,4 +42,5 @@ export interface UserAccount {
   credits: number;
   lastDailyClaim: number | null; // Timestamp of last claim
   streak: number;
+  isPremium: boolean;
 }
